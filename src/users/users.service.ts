@@ -6,6 +6,7 @@ import { User } from './entities/user.entity.js';
 import { Repository } from 'typeorm';
 import bcrypt from 'bcrypt';
 import { QueryUsersDto } from './dto/query.users.dto.js';
+import { UUID } from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -38,23 +39,30 @@ export class UsersService {
     return queryBiulder.getMany();
   }
 
-  async findOneById(id: string) {
-
+  async findOneById(id: UUID): Promise<User> {
+    const user = await this.userRepo.findOneBy({ id })
+    if (!user) {
+      throw new NotFoundException(`کاربری با شناسه ${id} پیدا نشد.`)
+    }
+    return user;
   }
 
   async findOneByMobile(mobile: string) {
     const user = await this.userRepo.findOneBy({ mobile });
     if (!user) {
-      throw new NotFoundException('کابری با این شماره تماس وجود ندارد.')
+      throw new NotFoundException(`کابری با شماره تماس ${mobile} وجود ندارد.`)
     }
     return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: UUID, updateUserDto: UpdateUserDto): Promise<User> {
+    const user = await this.findOneById(id);
+    Object.assign(user, updateUserDto);
+    return this.userRepo.save(user);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: UUID): Promise<void> {
+    await this.findOneById(id);
+    await this.userRepo.delete({ id });
   }
 }
