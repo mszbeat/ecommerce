@@ -4,6 +4,7 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigModule } from '@nestjs/config'
+import { UsersModule } from './users/users.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -22,7 +23,8 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       host: process.env.DB_HOST,
       synchronize: true,
       autoLoadEntities: true
-    })
+    }),
+    UsersModule
   ],
   controllers: [AppController],
   providers: [AppService],
