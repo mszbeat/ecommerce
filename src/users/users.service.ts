@@ -47,7 +47,7 @@ export class UsersService {
     return user;
   }
 
-  async findOneByMobile(mobile: string) {
+  async findOneByMobile(mobile: string):Promise<User> {
     const user = await this.userRepo.findOneBy({ mobile });
     if (!user) {
       throw new NotFoundException(`کابری با شماره تماس ${mobile} وجود ندارد.`)
