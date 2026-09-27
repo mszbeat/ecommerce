@@ -4,59 +4,54 @@ import { CreateUserDto } from './dto/create-user.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
 import { QueryUsersDto } from './dto/query.users.dto.js';
 import type { UUID } from 'crypto';
-import type { Response } from 'express';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() createUserDto: CreateUserDto) {
     const result = await this.usersService.create(createUserDto);
-
-    return res.status(HttpStatus.CREATED).json({
+    return {
       message: 'کاربر باموفقیت ساخته شد.',
       data: result
-    })
+    };
   }
 
   @Get()
-  async findAll(@Query() query: QueryUsersDto, @Res() res: Response) {
+  async findAll(@Query() query: QueryUsersDto) {
     const result = await this.usersService.findAll(query);
-
-    return res.json({
-      message: 'لیست کاربران باموفقیت ذریافت شد.',
+    return {
+      message: 'لیست کاربران باموفقیت دریافت شد.',
       data: result
-    })
+    };
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: UUID, @Res() res: Response) {
+  async findOne(@Param('id') id: UUID) {
     const result = await this.usersService.findOneById(id);
-
-    return res.json({
+    return {
       message: 'اطلاعات کاربر باموفقیت دریافت شد.',
       data: result
-    })
+    };
   }
 
   @Patch(':id')
-  async update(@Param('id') id: UUID, @Body() updateUserDto: UpdateUserDto, @Res() res: Response) {
+  async update(@Param('id') id: UUID, @Body() updateUserDto: UpdateUserDto) {
     const result = await this.usersService.update(id, updateUserDto);
-
-    return res.json({
+    return {
       message: 'اطلاعات کاربر باموفقیت آپدیت شد.',
       data: result
-    })
+    };
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: UUID, @Res() res: Response) {
+  async remove(@Param('id') id: UUID) {
     const result = await this.usersService.remove(id);
-
-    return res.json({
+    return {
       message: 'کاربر باموفقیت حذف شد.',
       data: result
-    })
+    };
   }
 }

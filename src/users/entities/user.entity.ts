@@ -1,11 +1,12 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import RoleUserEnum from "../../common/enums/RoleUser.js";
 import { Exclude } from 'class-transformer'
+import type { UUID } from "crypto";
 
 @Entity('user')
 export class User {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id: UUID;
 
     @Column()
     name: string;

@@ -4,17 +4,24 @@ import { LoginDto } from './dto/login.dto.js';
 import { UsersService } from '../users/users.service.js';
 import bcrypt from 'bcrypt';
 import { ERROR_MESSAGES } from '../common/constants/messages.js';
+import { JwtService } from '@nestjs/jwt';
+import JwtPayloadInterface from '../common/interfaces/jwt.payload.inerface.js';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject()
-    private usersServis: UsersService
+    private usersServis: UsersService,
+    private jwtService: JwtService
   ) { }
 
   async register(registerDto: RegistrDto) {
     const newUser = await this.usersServis.create(registerDto);
-    return newUser;
+    const accessToken = this.generateToken({
+      sub: newUser.id,
+      mobile: newUser.mobile,
+      name: newUser.name
+    })
+    return { user: newUser, accessToken };
   }
 
   async login(loginDto: LoginDto) {
@@ -25,8 +32,17 @@ export class AuthService {
       throw ERROR_MESSAGES.AUTH.invalidCredentials;
     }
 
-    // generate token...
-    
-    return `This action returns all auth`;
+    const accessToken = this.generateToken({
+      sub: user.id,
+      mobile: user.mobile,
+      name: user.name
+    })
+
+    return { user, accessToken };
+  }
+
+  private generateToken(payload: JwtPayloadInterface) {
+    const accessToken = this.jwtService.sign(payload);
+    return accessToken;
   }
 }
