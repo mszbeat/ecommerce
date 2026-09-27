@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import RoleUserEnum from "../../common/enums/RoleUser.js";
 import { Exclude } from 'class-transformer'
 import type { UUID } from "crypto";
+import { Address } from "../../address/entities/address.entity.js";
 
 @Entity('user')
 export class User {
@@ -20,6 +21,9 @@ export class User {
 
     @Column({ type: 'enum', enum: RoleUserEnum, default: RoleUserEnum.normalUser })
     role: string;
+
+    @OneToMany(() => Address, (address) => { address.user })
+    addresses: Address[];
 
     @CreateDateColumn()
     createAt: Date;
