@@ -3,9 +3,9 @@ import { AuthService } from './auth.service.js';
 import { AuthController } from './auth.controller.js';
 import { UsersModule } from '../users/users.module.js';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UsersService } from '../users/users.service.js';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './strategies/jwt-strategy.js';
 
 @Module({
   imports: [
@@ -19,11 +19,11 @@ import { JwtModule } from '@nestjs/jwt';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn:configService.get('JWT_EXPIRATION')}
+        signOptions: { expiresIn: configService.get('JWT_EXPIRATION') }
       })
     })
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, JwtStrategy],
 })
 export class AuthModule { }

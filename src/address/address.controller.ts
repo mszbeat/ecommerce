@@ -1,14 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards } from '@nestjs/common';
 import { AddressService } from './address.service.js';
 import { CreateAddressDto } from './dto/create-address.dto.js';
 import { UpdateAddressDto } from './dto/update-address.dto.js';
 import type { UUID } from 'crypto';
+import { JwtAuthGuard } from '../auth/guards/jwt.auth.guard.js';
+import { Roles } from '../common/decorators/set.role.js';
+import RoleUserEnum from '../common/enums/RoleUser.js';
+import { RolesGuard } from '../auth/guards/role.guard.js';
 
 @Controller('address')
 export class AddressController {
   constructor(private readonly addressService: AddressService) { }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   async create(@Body() createAddressDto: CreateAddressDto, @Req() req: any) {
     const result = await this.addressService.create(createAddressDto, req.user.id);
 
@@ -18,6 +23,8 @@ export class AddressController {
     }
   }
 
+  @UseGuards(JwtAuthGuard,RolesGuard)
+  @Roles(RoleUserEnum.admin)
   @Get()
   async findAll() {
     const result = await this.addressService.findAll();

@@ -8,7 +8,7 @@ import { Address } from './entities/address.entity.js';
 @Module({
   imports:[
     TypeOrmModule.forFeature([Address]),
-    UsersModule
+    UsersModule,
   ],
   controllers: [AddressController],
   providers: [AddressService],
