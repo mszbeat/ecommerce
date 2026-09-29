@@ -3,6 +3,7 @@ import RoleUserEnum from "../../common/enums/RoleUser.js";
 import { Exclude } from 'class-transformer'
 import type { UUID } from "crypto";
 import { Address } from "../../address/entities/address.entity.js";
+import { Ticket } from "../../ticket/entities/ticket.entity.js";
 
 @Entity('user')
 export class User {
@@ -24,6 +25,9 @@ export class User {
 
     @OneToMany(() => Address, (address) => { address.user })
     addresses: Address[];
+
+    @OneToMany(() => Ticket, (ticket) => { ticket.user })
+    tickets: Ticket[];
 
     @CreateDateColumn()
     createAt: Date;
