@@ -4,6 +4,7 @@ import { CreateTicketDto } from './dto/create-ticket.dto.js';
 import { UpdateTicketDto } from './dto/update-ticket.dto.js';
 import type { UUID } from 'crypto';
 import { JwtAuthGuard } from '../auth/guards/jwt.auth.guard.js';
+import { RESPONSE_MESSAGES } from '../common/constants/messages.js';
 
 @Controller('ticket')
 export class TicketController {
@@ -12,26 +13,19 @@ export class TicketController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() createTicketDto: CreateTicketDto, @Req() req: any) {
-    return await this.ticketService.create(createTicketDto, req.user);
+    const result = await this.ticketService.create(createTicketDto, req.user);
+    return RESPONSE_MESSAGES.TICKETS.create(result)
   }
 
   @Get()
-  findAll() {
-    return this.ticketService.findAll();
+  async findAll() {
+    const result = await this.ticketService.findAll();
+    return RESPONSE_MESSAGES.TICKETS.findAll(result);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ticketService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {
-    return this.ticketService.update(+id, updateTicketDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ticketService.remove(+id);
+  async findOne(@Param('id') id: UUID) {
+    const result = await this.ticketService.findOne(id);
+    return RESPONSE_MESSAGES.TICKETS.findOne(result)
   }
 }

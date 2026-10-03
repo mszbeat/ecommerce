@@ -79,11 +79,25 @@ export const RESPONSE_MESSAGES = {
       },
     },
   },
-  POSTS: {
+  TICKETS: {
     create: (data: object) => ({
       message: {
-        en: 'New post created successfully',
-        fa: 'پست جدید با موفقیت ایجاد شد',
+        en: 'New ticket created successfully',
+        fa: 'تیکت جدید با موفقیت ایجاد شد',
+      },
+      data,
+    }),
+    findOne: (data: object) => ({
+      message: {
+        fa: 'تیکت با موفقیت بازیابی شد',
+        en: 'Ticket retrieved successfully',
+      },
+      data,
+    }),
+    findAll: (data: object) => ({
+      message: {
+        fa: 'لیست تیکت ها با موفقیت بازیابی شد',
+        en: 'Tickets list retrieved successfully',
       },
       data,
     }),
@@ -150,13 +164,19 @@ export const ERROR_MESSAGES = {
   INTERNAL_ERROR: (error: object) => {
     throw new InternalServerErrorException(error);
   },
-  POSTS: {
-    postAlreadyExists: new ConflictException({
+  TICKETS: {
+    notFound: new NotFoundException({
       message: {
-        en: 'Post already exists',
-        fa: 'این پست موجود است',
+        en: 'Ticket not found',
+        fa: 'تیکت یافت نشد',
       },
     }),
+    conflict:new ConflictException({
+      message:{
+        fa:'نمی توان روی پیام ریپلای، ریپلای زد.',
+        en:'You cannot reply to a reply message.'
+      }
+    })
   },
   COMMENTS: {
     commentNotFound: new NotFoundException({

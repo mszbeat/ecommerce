@@ -10,7 +10,7 @@ export class Ticket {
     @Column({ nullable: false })
     title: string;
 
-    @ManyToOne(() => User, (user) => user.tickets )
+    @ManyToOne(() => User, (user) => user.tickets)
     user: Relation<User>;
 
     @Column({ nullable: false })
@@ -19,10 +19,10 @@ export class Ticket {
     @Column({ nullable: false })
     description: string;
 
-    @ManyToOne(() => Ticket, (ticket) => ticket.replies , { nullable: true })
+    @ManyToOne(() => Ticket, (ticket) => ticket.replies, { nullable: true, onDelete: 'CASCADE' })
     replyTo: Ticket;
 
-    @OneToMany(() => Ticket, (ticket) => ticket.replyTo , { nullable: true })
+    @OneToMany(() => Ticket, (ticket) => ticket.replyTo, { nullable: true })
     replies: Ticket[];
 
     @CreateDateColumn()
