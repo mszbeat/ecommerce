@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, type Relation, UpdateDateColumn } from "typeorm";
 import type { UUID } from "crypto";
 import { User } from "../../users/entities/user.entity.js";
 
@@ -10,8 +10,8 @@ export class Ticket {
     @Column({ nullable: false })
     title: string;
 
-    @ManyToOne(() => User, (user) => { user.tickets })
-    user: User;
+    @ManyToOne(() => User, (user) => user.tickets )
+    user: Relation<User>;
 
     @Column({ nullable: false })
     subject: string;
@@ -19,10 +19,10 @@ export class Ticket {
     @Column({ nullable: false })
     description: string;
 
-    @ManyToOne(() => Ticket, (ticket) => { ticket.replies }, { nullable: true })
+    @ManyToOne(() => Ticket, (ticket) => ticket.replies , { nullable: true })
     replyTo: Ticket;
 
-    @OneToMany(() => Ticket, (ticket) => { ticket.replyTo }, { nullable: true })
+    @OneToMany(() => Ticket, (ticket) => ticket.replyTo , { nullable: true })
     replies: Ticket[];
 
     @CreateDateColumn()
