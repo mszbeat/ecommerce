@@ -8,6 +8,8 @@ import { UsersModule } from './users/users.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { AddressModule } from './address/address.module.js';
 import { TicketModule } from './ticket/ticket.module.js';
+import { ProductsModule } from './products/products.module.js';
+import { CategoriesModule } from './categories/categories.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -30,7 +32,9 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     UsersModule,
     AuthModule,
     AddressModule,
-    TicketModule
+    TicketModule,
+    ProductsModule,
+    CategoriesModule
   ],
   controllers: [AppController],
   providers: [AppService],
